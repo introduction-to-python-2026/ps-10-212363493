@@ -1,23 +1,17 @@
-from image_utils import load_image, edge_detection
+# image_utils.py
+import numpy as np
 from PIL import Image
 from skimage.filters import median, threshold_otsu
-from skimage.morphology import ball
-import numpy as np
-import matplotlib.pyplot as plt
+from skimage.morphology import disk
 from scipy.signal import convolve2d
+import matplotlib.pyplot as plt
 
 def load_image(image_path):
     image = Image.open(image_path)
     image_array = np.array(image)
     return image_array
 
-my_img = load_image("/content/my_picture.jpg")
-plt.imshow(my_img)
-print(my_img.dtype)     
-print(my_img.shape)
-
-
-def edge_detection_final(my_img_array, median_size=3, gamma=0.5, show_intermediate=False):
+def edge_detection(my_img_array, median_size=3, gamma=0.5, show_intermediate=False):
     gray_image = np.mean(my_img_array, axis=2)
     
     if show_intermediate:
@@ -45,12 +39,4 @@ def edge_detection_final(my_img_array, median_size=3, gamma=0.5, show_intermedia
     thresh = threshold_otsu(edgeMAG)
     edge_binary = edgeMAG > thresh
     
-    plt.figure(figsize=(8,6))
-    plt.imshow(edge_binary, cmap='gray')
-    plt.axis('off')
-    plt.show()
-    
     return edge_binary
-
-my_img = load_image("/content/my_picture.jpg")
-edges = edge_detection_final(my_img)
