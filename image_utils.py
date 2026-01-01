@@ -16,7 +16,7 @@ def edge_detection(my_img_array, gamma=0.5):
     edgeX = convolve2d(gray_image, kernelX, mode='same', boundary='fill', fillvalue=0)
     
     edgeMAG = np.sqrt(edgeX**2 + edgeY**2)
-    edgeMAG = edgeMAG / edgeMAG.max() * 255  # 0-255
+    edgeMAG = edgeMAG / edgeMAG.max() * 255  # 0–255
     edgeMAG = edgeMAG ** gamma
     
-    return edgeMAG  # לא עושים thresholding
+    return edgeMAG
