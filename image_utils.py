@@ -1,30 +1,16 @@
-# image_utils.py
 import numpy as np
 from PIL import Image
 from skimage.filters import median, threshold_otsu
 from skimage.morphology import disk
 from scipy.signal import convolve2d
-import matplotlib.pyplot as plt
 
 def load_image(image_path):
     image = Image.open(image_path)
-    image_array = np.array(image)
-    return image_array
+    return np.array(image)
 
-def edge_detection(my_img_array, median_size=3, gamma=0.5, show_intermediate=False):
+def edge_detection(my_img_array, median_size=3, gamma=0.5):
     gray_image = np.mean(my_img_array, axis=2)
-    
-    if show_intermediate:
-        plt.imshow(gray_image, cmap='gray')
-        plt.axis('off')
-        plt.show()
-    
     clean_image = median(gray_image, disk(median_size))
-    
-    if show_intermediate:
-        plt.imshow(clean_image, cmap='gray')
-        plt.axis('off')
-        plt.show()
     
     kernelY = np.array([[1,0,-1],[2,0,-2],[1,0,-1]])
     kernelX = np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
