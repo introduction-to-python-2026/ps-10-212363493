@@ -1,4 +1,3 @@
-# image_utils.py
 import numpy as np
 from PIL import Image
 from scipy.signal import convolve2d
