@@ -1,24 +1,39 @@
-# image_utils.py
-import numpy as np
+# main.py
+from image_utils import load_image, edge_detection
 from PIL import Image
-from scipy.signal import convolve2d
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage.filters import median
+from skimage.morphology import ball
 
-def load_image(image_path):
-    image = Image.open(image_path).convert('RGB')
-    return np.array(image)
+# 1️⃣ טען את התמונה המקורית
+my_img = load_image("/content/my_picture.jpg")
 
-def edge_detection(my_img_array):
-    gray_image = np.mean(my_img_array, axis=2)
+# 2️⃣ הסרת רעש עם median filter
+clean_image = median(my_img, ball(3))
 
-    kernelY = np.array([[1, 0, -1],
-                        [2, 0, -2],
-                        [1, 0, -1]])
-    kernelX = np.array([[-1, -2, -1],
-                        [0, 0, 0],
-                        [1, 2, 1]])
+# 3️⃣ חישוב הקצוות
+edges = edge_detection(clean_image)
 
-    edgeY = convolve2d(gray_image, kernelY, mode='same', boundary='fill', fillvalue=0)
-    edgeX = convolve2d(gray_image, kernelX, mode='same', boundary='fill', fillvalue=0)
+# 4️⃣ נורמליזציה + gamma correction
+edges = edges / edges.max()
+edges = edges ** 0.5  # אפשר לשנות את 0.5 כדי להדגיש קצוות
 
-    edgeMAG = np.sqrt(edgeX**2 + edgeY**2)
-    return edgeMAG
+# 5️⃣ הצגת התמונות
+plt.figure(figsize=(12,6))
+
+plt.subplot(1,2,1)
+plt.imshow(my_img)
+plt.axis('off')
+plt.title("Original Image")
+
+plt.subplot(1,2,2)
+plt.imshow(edges, cmap='gray')
+plt.axis('off')
+plt.title("Edge Detected Image")
+
+plt.show()
+
+# 6️⃣ שמירת התמונה הסופית
+edge_image_to_save = (edges * 255).astype(np.uint8)
+Image.fromarray(edge_image_to_save).save("my_edges.png")
