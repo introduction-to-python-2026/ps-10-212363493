@@ -44,14 +44,20 @@ def edge_detection(my_img_array):
     edgeY = convolve2d(gray_image, kernelY, mode='same', boundary='fill', fillvalue=0)
     edgeX = convolve2d(gray_image, kernelX, mode='same', boundary='fill', fillvalue=0)
 
-   
+    # 4️⃣ Compute edge magnitude
     edgeMAG = np.sqrt(edgeX**2 + edgeY**2)
 
+    # 5️⃣ Normalize to 0-1
+    edgeMAG = edgeMAG / edgeMAG.max()
+
+    # 6️⃣ Gamma correction to emphasize edges
+    edgeMAG = edgeMAG ** 0.5  # adjust exponent if needed
+
+    # 7️⃣ Display
     plt.imshow(edgeMAG, cmap='gray')
     plt.axis('off')
     plt.show()
 
     return edgeMAG
 
-edges = edge_detection(my_img)
-edge_detection(my_img)
+edge_detection(my_img)  
