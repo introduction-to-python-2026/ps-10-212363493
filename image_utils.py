@@ -23,5 +23,35 @@ def edge_detection(my_img_array):
     plt.show()
     print(gray_image.shape)
     print(gray_image.dtype)
+    from scipy.signal import convolve2d
+    filter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]]) 
+    filtered_image = convolve2d(gray_image, filter, mode='same')
+    plt.imshow(filtered_image, cmap='gray')
 
+    kernelY = np.array([
+        [1, 0, -1],
+        [2, 0, -2],
+        [1, 0, -1]
+    ])
+
+    kernelX = np.array([
+        [-1, -2, -1],
+        [0,  0,  0],
+        [1,  2,  1]
+    ])
+
+   
+    edgeY = convolve2d(gray_image, kernelY, mode='same', boundary='fill', fillvalue=0)
+    edgeX = convolve2d(gray_image, kernelX, mode='same', boundary='fill', fillvalue=0)
+
+   
+    edgeMAG = np.sqrt(edgeX**2 + edgeY**2)
+
+    plt.imshow(edgeMAG, cmap='gray')
+    plt.axis('off')
+    plt.show()
+
+    return edgeMAG
+
+edges = edge_detection(my_img)
 edge_detection(my_img)
